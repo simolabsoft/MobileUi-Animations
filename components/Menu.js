@@ -3,22 +3,45 @@ import styled from "styled-components";
 import { Animated, TouchableOpacity, Dimensions } from "react-native";
 import { Icon } from "expo";
 import MenuItem from "./MenuItem";
+import { connect } from "react-redux";
 
+function mapStateToProps(state) {
+  return { action: state.action };
+}
+
+function mapDispatchToProps(disptach) {
+  return {
+    closeMenu: () =>
+      disptach({
+        type: "CLOSE_MENU"
+      })
+  };
+}
 const screenHeight = Dimensions.get("window").height;
 
-export default class Menu extends React.Component {
+class Menu extends React.Component {
   state = {
     top: new Animated.Value(screenHeight)
   };
   componentDidMount() {
-    Animated.spring(this.state.top, {
-      toValue: 0
-    }).start();
+    this.toggleMenu();
   }
+  componentDidUpdate() {
+    this.toggleMenu();
+  }
+
   toggleMenu = () => {
-    Animated.spring(this.state.top, {
-      toValue: screenHeight
-    }).start();
+    if (this.props.action === "openMenu") {
+      Animated.spring(this.state.top, {
+        toValue: 54
+      }).start();
+    }
+
+    if (this.props.action === "closeMenu") {
+      Animated.spring(this.state.top, {
+        toValue: screenHeight
+      }).start();
+    }
   };
 
   render() {
@@ -32,7 +55,7 @@ export default class Menu extends React.Component {
           </Subtitle>
         </Cover>
         <TouchableOpacity
-          onPress={this.toggleMenu}
+          onPress={this.props.closeMenu}
           style={{
             position: "absolute",
             top: 120,
@@ -66,6 +89,8 @@ const Container = styled.View`
   width: 100%;
   height: 100%;
   z-index: 100;
+  border-radius: 10px;
+  overflow: hidden;
 `;
 const AnimatedContainer = Animated.createAnimatedComponent(Container);
 const Cover = styled.View`
@@ -129,3 +154,8 @@ const items = [
     text: "settings"
   }
 ];
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Menu);
