@@ -49,9 +49,9 @@ class Menu extends React.Component {
       <AnimatedContainer style={{ top: this.state.top }}>
         <Cover>
           <Image source={require("../assets/background2.jpg")} />
-          <Title>Simo Labied</Title>
+          <Title>SimoDev</Title>
           <Subtitle>
-            Welcome to this React native Design Project by Melyana
+            Welcome to this React native Design Project by Mohammed Labied
           </Subtitle>
         </Cover>
         <TouchableOpacity
